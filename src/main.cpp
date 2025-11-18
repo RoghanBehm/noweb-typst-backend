@@ -10,7 +10,7 @@
 
 int main(int argc, char **argv) {
   if (argc < 3) {
-    std::cerr << "usage: noweb-typst <file>\n";
+    std::cerr << "usage: noweb-typst <file> <code language>\n";
   }
 
   std::string filename = argv[1];
