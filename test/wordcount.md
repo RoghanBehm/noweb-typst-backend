@@ -1,6 +1,6 @@
-@file wordcount.nw
+@file test/wordcount.nw
 @begin docs 0
-@text \section{A tiny word counter}
+@text = A tiny word counter
 @nl
 @text 
 @nl
@@ -8,7 +8,7 @@
 @nl
 @text The program runs in $O(n)$ over the bytes of the input.
 @nl
-@text We assemble the final script in the chunk \verb|<<wc.py>>=| by
+@text We assemble the final script in the chunk `<<wc.py>>=` by
 @nl
 @text referring to named subchunks that we define later.
 @nl
@@ -36,7 +36,7 @@
 @nl
 @text 
 @nl
-@text \subsection{Imports}
+@text == Imports
 @nl
 @text 
 @nl
@@ -58,7 +58,7 @@
 @nl
 @text 
 @nl
-@text \subsection{Argument parsing}
+@text == Argument parsing
 @nl
 @text 
 @nl
@@ -88,7 +88,7 @@
 @nl
 @text 
 @nl
-@text \subsection{Counting logic}
+@text == Counting logic
 @nl
 @text 
 @nl
@@ -126,7 +126,7 @@
 @nl
 @text 
 @nl
-@text \subsection{Program entry point}
+@text == Program entry point
 @nl
 @text 
 @nl

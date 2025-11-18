@@ -1,16 +1,20 @@
-#include "document.hpp"
-#include "parser.hpp"
 #include <cassert>
 #include <fstream>
 #include <iostream>
+#include <ostream>
 #include <string>
 
+#include "document.hpp"
+#include "parser.hpp"
+#include "emitter.hpp"
+
 int main(int argc, char **argv) {
-  if (argc < 2) {
+  if (argc < 3) {
     std::cerr << "usage: noweb-typst <file>\n";
   }
 
   std::string filename = argv[1];
+  std::string code_lang = argv[2];
   std::ifstream inputFile(filename);
 
   if (!inputFile.is_open()) {
@@ -20,5 +24,8 @@ int main(int argc, char **argv) {
 
   Document doc = parse_markup(inputFile);
   dump_document(doc);
+
+  std::ofstream file("out.typ");
+  emit_typst(file, doc, code_lang);
   return 0;
 }
