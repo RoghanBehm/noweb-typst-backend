@@ -34,6 +34,7 @@ Document parse_markup(std::istream &input) {
       // end block
       assert(has_curr);
       doc.blocks.push_back(std::move(current));
+
       has_curr = false;
 
     } else if (line.rfind("@text ", 0) == 0) {
@@ -41,7 +42,7 @@ Document parse_markup(std::istream &input) {
       current.text += line.substr(6) + "\n";
     } else if (line == "@nl") {
       assert(has_curr);
-      current.text += "\n";
+      current.text += " ";
     } else if (line.rfind("@defn ", 0) == 0) {
       // code chunk
       assert(current.name.empty());
@@ -61,9 +62,7 @@ Document parse_markup(std::istream &input) {
       current.text += line.substr(9) + "\n";
     }
   }
-  if (has_curr) {
-    doc.blocks.push_back(std::move(current));
-    has_curr = false;
-  }
+  if (has_curr) doc.blocks.push_back(std::move(current));
+
   return doc;
 }

@@ -15,6 +15,8 @@ struct Document {
     std::vector<Block> blocks;
 };
 
+
+// Debug 
 inline const char* kind_to_string(Block::Kind k) {
     return k == Block::Kind::Docs ? "Docs" : "Code";
 }
@@ -37,3 +39,4 @@ inline void dump_document(const Document& doc, std::ostream& out = std::cout) {
         out << "================\n\n";
     }
 }
+//
