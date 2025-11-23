@@ -5,8 +5,8 @@
 #include <string>
 
 #include "document.hpp"
-#include "parser.hpp"
 #include "emitter.hpp"
+#include "parser.hpp"
 
 int main(int argc, char **argv) {
   if (argc < 3) {
@@ -24,17 +24,17 @@ int main(int argc, char **argv) {
   }
 
   Document doc = parse_markup(inputFile);
-  dump_document(doc);
 
   std::ofstream file("out.typ");
-  
+
   // Rebuild .nw filename (hacky)
   std::size_t pos = filename.find_last_of('/');
-  std::string nw_filename = (pos == std::string::npos) ? filename : filename.substr(pos + 1);
+  std::string nw_filename =
+      (pos == std::string::npos) ? filename : filename.substr(pos + 1);
   if (nw_filename.size() >= 2) {
-      nw_filename.replace(nw_filename.size() - 2, 2, "nw");
+    nw_filename.replace(nw_filename.size() - 2, 2, "nw");
   }
- 
+
   emit_typst(file, doc, code_lang, nw_filename);
   return 0;
 }

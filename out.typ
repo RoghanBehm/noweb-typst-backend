@@ -7,104 +7,85 @@
 #set page(header: context [ #set text(10pt); #today.display("[month repr:long] [day], [year]")#h(1fr)`wordcount.nw`#h(1cm)#counter(page).display()])
 
 = A tiny word counter
- 
- We will build a minimal word counter and explain its parts.
- The program runs in $O(n)$ over the bytes of the input.
- We assemble the final script in the chunk `<<wc.py>>=` by
- referring to named subchunks that we define later.
- 
- 
-$chevron.l$_wc.py_$chevron.r#h(-0.1em)eq.triple$
 
-```python
- 
- 
- 
- 
- 
+We will build a minimal word counter and explain its parts.
+The program runs in $O(n)$ over the bytes of the input.
+We assemble the final script in the chunk `<<wc.py>>=` by
+referring to named subchunks that we define later.
+
+
+#block(breakable: false)[
+$chevron.l$_wc.py_$chevron.r#h(-0.1em)eq.triple$ \ #h(1.5em)$chevron.l$_imports_$chevron.r$ \ #h(1.5em)$chevron.l$_parse-args_$chevron.r$ \ #h(1.5em)$chevron.l$_count-words_$chevron.r$ \ #h(1.5em)$chevron.l$_main-guard_$chevron.r$ \ ]
+\ 
+
+== Imports
+
+
+#block(breakable: false)[
+$chevron.l$_imports_$chevron.r#h(-0.1em)eq.triple$ \ ```python
+    import sys
+    from collections import Counter
+    from pathlib import Path
+    import argparse
 ```
+]
+\ 
+
+== Argument parsing
 
 
- 
- == Imports
- 
- 
-$chevron.l$_imports_$chevron.r#h(-0.1em)eq.triple$
-
-```python
- import sys
- from collections import Counter
- from pathlib import Path
- import argparse
- 
+#block(breakable: false)[
+$chevron.l$_parse-args_$chevron.r#h(-0.1em)eq.triple$ \ ```python
+    def parse_args(argv=None):
+        p = argparse.ArgumentParser(
+            description="Count words in a file or stdin."
+        )
+        p.add_argument("file", nargs="?", help="Path to text file; default: stdin")
+        p.add_argument("-n", "--top", type=int, default=10,
+                       help="Show top-N words (default: 10)")
+        return p.parse_args(argv)
 ```
+]
+\ 
+
+== Counting logic
 
 
- 
- == Argument parsing
- 
- 
-$chevron.l$_parse-args_$chevron.r#h(-0.1em)eq.triple$
-
-```python
- def parse_args(argv=None):
-     p = argparse.ArgumentParser(
-         description="Count words in a file or stdin."
-     )
-     p.add_argument("file", nargs="?", help="Path to text file; default: stdin")
-     p.add_argument("-n", "--top", type=int, default=10,
-                    help="Show top-N words (default: 10)")
-     return p.parse_args(argv)
- 
+#block(breakable: false)[
+$chevron.l$_count-words_$chevron.r#h(-0.1em)eq.triple$ \ ```python
+    def words_from_text(text: str):
+        # Very naive tokenization: split on whitespace and punctuation
+        # Lowercasing makes counts case-insensitive.
+        import re
+        for w in re.findall(r"[A-Za-z0-9']+", text.lower()):
+            yield w
+    def count_words(stream) -> Counter:
+        c = Counter()
+        for line in stream:
+            c.update(words_from_text(line))
+        return c
 ```
+]
+\ 
+
+== Program entry point
 
 
- 
- == Counting logic
- 
- 
-$chevron.l$_count-words_$chevron.r#h(-0.1em)eq.triple$
-
-```python
- def words_from_text(text: str):
-     # Very naive tokenization: split on whitespace and punctuation
-     # Lowercasing makes counts case-insensitive.
-     import re
-     for w in re.findall(r"[A-Za-z0-9']+", text.lower()):
-         yield w
- 
- def count_words(stream) -> Counter:
-     c = Counter()
-     for line in stream:
-         c.update(words_from_text(line))
-     return c
- 
+#block(breakable: false)[
+$chevron.l$_main-guard_$chevron.r#h(-0.1em)eq.triple$ \ ```python
+    def main(argv=None):
+        args = parse_args(argv)
+        if args.file:
+            data = Path(args.file).read_text(encoding="utf-8", errors="ignore")
+            stream = data.splitlines(keepends=True)
+        else:
+            stream = sys.stdin
+        counts = count_words(stream)
+        for word, n in counts.most_common(args.top):
+            print(f"{n:7d}  {word}")
+    if __name__ == "__main__":
+        main()
 ```
+]
+\ 
 
-
- 
- == Program entry point
- 
- 
-$chevron.l$_main-guard_$chevron.r#h(-0.1em)eq.triple$
-
-```python
- def main(argv=None):
-     args = parse_args(argv)
-     if args.file:
-         data = Path(args.file).read_text(encoding="utf-8", errors="ignore")
-         stream = data.splitlines(keepends=True)
-     else:
-         stream = sys.stdin
- 
-     counts = count_words(stream)
-     for word, n in counts.most_common(args.top):
-         print(f"{n:7d}  {word}")
- 
- if __name__ == "__main__":
-     main()
- 
-```
-
-
- 

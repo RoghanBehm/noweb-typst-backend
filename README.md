@@ -30,6 +30,5 @@ Comparison of the two highlights some of the remaining deficiencies in this prog
 
 
 ### TODO
-- Update IR to implement @use
 - Support @quote and @endquote
-- Reconsider @literal implementation
+- Improve Typst styling
