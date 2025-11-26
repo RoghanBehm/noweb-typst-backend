@@ -41,6 +41,8 @@ If `markup` is not on your `PATH`, you can call it via its full path. For exampl
 
 Comparison of the two highlights some of the remaining deficiencies in this program. 
 
+## Building
+Run `cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug` to generate the build folder.
 
 ### TODO
 - Support @quote and @endquote
